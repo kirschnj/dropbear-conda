@@ -1,0 +1,36 @@
+{% set name = "dropbear" %}
+{% set version = "2025.88" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://matt.ucc.asn.au/dropbear/releases/dropbear-{{ version }}.tar.bz2
+
+build:
+  number: 0
+  skip: True  # [not linux]
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - make
+  host:
+    - zlib
+  run:
+    - zlib
+
+about:
+  home: https://matt.ucc.asn.au/dropbear/dropbear.html
+  license: MIT
+  license_family: MIT
+  summary: 'Dropbear SSH server and client'
+  description: |
+    Dropbear is a relatively small SSH server and client. It runs on a variety of POSIX-based platforms.
+    Dropbear is open source software, distributed under a MIT-style license.
+  dev_url: https://github.com/mkj/dropbear
+
+extra:
+  recipe-maintainers:
+    - kirschnj

@@ -1,0 +1,41 @@
+name: Build Dropbear Conda Package
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Miniconda
+      uses: conda-incubator/setup-miniconda@v3
+      with:
+        auto-update-conda: true
+        python-version: 3.11
+        
+    - name: Install conda-build
+      shell: bash -l {0}
+      run: |
+        conda install -y conda-build anaconda-client
+        
+    - name: Build conda package
+      shell: bash -l {0}
+      run: |
+        conda build recipe --output-folder ./conda-bld
+        
+    - name: Upload conda package as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: dropbear-conda-package
+        path: conda-bld/linux-64/*.tar.bz2
+        retention-days: 30
